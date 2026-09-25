@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paper &amp; Bell</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <p class="sub">Redirecting…</p>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      // This page has no content of its own — it just decides, in
+      // JavaScript, where a visitor should land: their module
+      // dashboard if they're already logged in, or the login page.
+      const session = getSession();
+      if (session && session.role === "admin") {
+        window.location.href = "admin/dashboard.html";
+      } else if (session && session.role === "user") {
+        window.location.href = "user/market.html";
+      } else {
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

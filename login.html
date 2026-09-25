@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log in — Paper &amp; Bell</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="auth-shell">
+      <div class="auth-card">
+        <h1>Paper &amp; Bell</h1>
+        <p class="sub">Simulated trading floor. Log in to continue.</p>
+
+        <div id="errorBox" class="form-error" style="display:none;"></div>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="username">Username</label>
+            <input type="text" id="username" required autocomplete="username" />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" required autocomplete="current-password" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;padding:10px 0;">Log in</button>
+        </form>
+
+        <div class="auth-switch">
+          New here? <a href="signup.html">Create an account</a>
+        </div>
+        <div class="auth-switch" style="margin-top:4px;">
+          Demo admin — username <b>admin</b>, password <b>admin123</b>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+      const form = document.getElementById("loginForm");
+      const errorBox = document.getElementById("errorBox");
+
+      const existing = getSession();
+      if (existing) {
+        window.location.href = existing.role === "admin" ? "admin/dashboard.html" : "user/market.html";
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const result = login({ username, password });
+        if (!result.ok) {
+          errorBox.textContent = result.error;
+          errorBox.style.display = "block";
+          return;
+        }
+
+        // Role-based redirection, decided entirely in JavaScript.
+        if (result.role === "admin") {
+          window.location.href = "admin/dashboard.html";
+        } else {
+          window.location.href = "user/market.html";
+        }
+      });
+    </script>
+  </body>
+</html>
